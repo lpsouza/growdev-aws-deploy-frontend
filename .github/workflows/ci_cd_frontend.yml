@@ -35,5 +35,5 @@ jobs:
           AWS_REGION: 'us-east-1'
         run: |
           aws s3 cp frontend.zip s3://lpsouza-artifact-deploy/frontend.zip
-          aws elasticbeanstalk create-application-version --application-name AppFrontend --version-label v2 --source-bundle S3Bucket="lpsouza-artifact-deploy",S3Key="frontend.zip"
-          aws elasticbeanstalk update-environment --application-name AppFrontend --environment-name AppFrontendEnv --version-label v2
+          aws elasticbeanstalk create-application-version --application-name AppFrontend --version-label v1 --source-bundle S3Bucket="lpsouza-artifact-deploy",S3Key="frontend.zip"
+          aws elasticbeanstalk update-environment --application-name AppFrontend --environment-name AppFrontendEnv --version-label v1
