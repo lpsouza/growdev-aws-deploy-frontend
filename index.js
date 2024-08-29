@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 4000;
 const axios = require('axios');
-const endpoint = 'http://localhost:3000/users';
+const endpoint = 'http://api-growdev.us-east-1.elasticbeanstalk.com/users';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
