@@ -1,8 +1,9 @@
 
 const express = require('express');
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 const axios = require('axios');
+const endpoint = 'http://appbackendenv.eba-hbbagamq.us-east-1.elasticbeanstalk.com/users';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -12,7 +13,7 @@ app.use(express.static('public'));
 // Home route to display users
 app.get('/', async (req, res) => {
     try {
-        const response = await axios.get('http://localhost:3000/users');
+        const response = await axios.get(endpoint);
         res.render('index', { users: response.data });
     } catch (error) {
         res.status(500).send('Error fetching users');
@@ -27,7 +28,7 @@ app.get('/users/new', (req, res) => {
 // Route to handle creation of a new user
 app.post('/users', async (req, res) => {
     try {
-        await axios.post('http://localhost:3000/users', req.body);
+        await axios.post(endpoint, req.body);
         res.redirect('/');
     } catch (error) {
         res.status(500).send('Error creating user');
@@ -37,7 +38,7 @@ app.post('/users', async (req, res) => {
 // Route to display form to edit an existing user
 app.get('/users/edit/:id', async (req, res) => {
     try {
-        const response = await axios.get(`http://localhost:3000/users/${req.params.id}`);
+        const response = await axios.get(`${endpoint}/${req.params.id}`);
         res.render('edit', { user: response.data });
     } catch (error) {
         res.status(500).send('Error fetching user data');
@@ -47,7 +48,7 @@ app.get('/users/edit/:id', async (req, res) => {
 // Route to handle updating an existing user
 app.post('/users/edit/:id', async (req, res) => {
     try {
-        await axios.put(`http://localhost:3000/users/${req.params.id}`, req.body);
+        await axios.put(`${endpoint}/${req.params.id}`, req.body);
         res.redirect('/');
     } catch (error) {
         res.status(500).send('Error updating user');
@@ -57,7 +58,7 @@ app.post('/users/edit/:id', async (req, res) => {
 // Route to handle deletion of a user
 app.post('/users/delete/:id', async (req, res) => {
     try {
-        await axios.delete(`http://localhost:3000/users/${req.params.id}`);
+        await axios.delete(`${endpoint}/${req.params.id}`);
         res.redirect('/');
     } catch (error) {
         res.status(500).send('Error deleting user');
