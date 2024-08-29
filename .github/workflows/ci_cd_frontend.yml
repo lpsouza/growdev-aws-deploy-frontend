@@ -1,0 +1,39 @@
+
+name: CI/CD Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Zip for deployment
+        run: zip -r frontend.zip * .[^.]*
+
+      - name: Deploy to Elastic Beanstalk
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-1'
+        run: |
+          aws s3 cp frontend.zip s3://your-bucket-name/frontend.zip
+          aws elasticbeanstalk create-application-version --application-name YourFrontendApp --version-label v1 --source-bundle S3Bucket="your-bucket-name",S3Key="frontend.zip"
+          aws elasticbeanstalk update-environment --application-name YourFrontendApp --environment-name YourFrontendEnv --version-label v1
