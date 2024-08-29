@@ -22,9 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
-        run: npm run build
-
       - name: Zip for deployment
         run: zip -r frontend.zip * .[^.]*
 
@@ -34,6 +31,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'
         run: |
-          aws s3 cp frontend.zip s3://your-bucket-name/frontend.zip
-          aws elasticbeanstalk create-application-version --application-name YourFrontendApp --version-label v1 --source-bundle S3Bucket="your-bucket-name",S3Key="frontend.zip"
-          aws elasticbeanstalk update-environment --application-name YourFrontendApp --environment-name YourFrontendEnv --version-label v1
+          aws s3 cp frontend.zip s3://lpsouza-artifact-deploy/frontend.zip
+          aws elasticbeanstalk create-application-version --application-name AppFrontend --version-label v1 --source-bundle S3Bucket="lpsouza-artifact-deploy",S3Key="frontend.zip"
+          aws elasticbeanstalk update-environment --application-name AppFrontend --environment-name AppFrontendEnv --version-label v1
